@@ -1,6 +1,7 @@
 import csv
 import io
 import json
+import os
 import sqlite3
 import uuid
 from pathlib import Path
@@ -12,9 +13,10 @@ from .simulation import execute
 
 app = FastAPI(title="CloudScale Lab API", version="0.1.0")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
-DB_PATH = Path(__file__).resolve().parents[2] / "cloudscale.db"
+DB_PATH = Path(os.getenv("CLOUDSCALE_DB", Path(__file__).resolve().parents[1] / "cloudscale.db"))
 
 def init_db():
+    DB_PATH.parent.mkdir(parents=True, exist_ok=True)
     with sqlite3.connect(DB_PATH) as db:
         db.execute("CREATE TABLE IF NOT EXISTS experiments (id TEXT PRIMARY KEY, name TEXT NOT NULL, result TEXT NOT NULL, created_at TEXT DEFAULT CURRENT_TIMESTAMP)")
 init_db()

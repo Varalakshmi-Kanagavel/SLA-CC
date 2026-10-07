@@ -1,0 +1,17 @@
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - cloudscale-data:/app/data
+    environment:
+      - CLOUDSCALE_DB=/app/data/cloudscale.db
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+volumes:
+  cloudscale-data:
