@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: adaptive-controller-sa
+  namespace: sla-autoscaling
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: adaptive-controller-role
+rules:
+  - apiGroups: ["autoscaling"]
+    resources: ["horizontalpodautoscalers"]
+    verbs: ["get", "list", "watch", "update", "patch"]
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["pods", "services"]
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: adaptive-controller-binding
+subjects:
+  - kind: ServiceAccount
+    name: adaptive-controller-sa
+    namespace: sla-autoscaling
+roleRef:
+  kind: ClusterRole
+  name: adaptive-controller-role
+  apiGroup: rbac.authorization.k8s.io
