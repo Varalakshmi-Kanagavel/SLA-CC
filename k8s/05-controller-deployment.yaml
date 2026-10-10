@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adaptive-controller-deployment
+  namespace: sla-autoscaling
+  labels:
+    app: adaptive-controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: adaptive-controller
+  template:
+    metadata:
+      labels:
+        app: adaptive-controller
+    spec:
+      serviceAccountName: adaptive-controller-sa
+      containers:
+        - name: controller
+          image: sla-cc-controller:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: NAMESPACE
+              value: "sla-autoscaling"
+            - name: HPA_NAME
+              value: "webapp-hpa"
+            - name: DEPLOYMENT_NAME
+              value: "webapp-deployment"
+            - name: PROMETHEUS_URL
+              value: "http://prometheus-kube-prometheus-prometheus.monitoring.svc.cluster.local:9090"
+            - name: SLO_MS
+              value: "200"
+            - name: INITIAL_THRESHOLD
+              value: "70"
+            - name: MIN_THRESHOLD
+              value: "40"
+            - name: MAX_THRESHOLD
+              value: "85"
+            - name: DECREASE_STEP
+              value: "5"
+            - name: INCREASE_STEP
+              value: "1"
+            - name: WARNING_MULTIPLIER
+              value: "1.2"
+            - name: CRITICAL_MULTIPLIER
+              value: "1.5"
+            - name: COOLDOWN_SECONDS
+              value: "30"
+            - name: POLL_INTERVAL_SECONDS
+              value: "10"
+            - name: DRY_RUN
+              value: "false"
+            - name: IN_CLUSTER
+              value: "true"
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "200m"
+              memory: "128Mi"

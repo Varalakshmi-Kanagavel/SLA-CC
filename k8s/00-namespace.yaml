@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sla-autoscaling
+  labels:
+    app.kubernetes.io/part-of: sla-cc
+    app.kubernetes.io/managed-by: team10

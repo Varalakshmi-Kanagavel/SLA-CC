@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: webapp-servicemonitor
+  namespace: sla-autoscaling
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: webapp
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 5s

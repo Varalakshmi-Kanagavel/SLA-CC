@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: minecraft-service
+  namespace: sla-autoscaling
+  labels:
+    app: minecraft
+spec:
+  type: NodePort
+  ports:
+    - port: 25565
+      targetPort: 25565
+      nodePort: 30565
+      name: minecraft-tcp
+  selector:
+    app: minecraft
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: minecraft-server
+  namespace: sla-autoscaling
+  labels:
+    app: minecraft
+spec:
+  serviceName: minecraft-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app: minecraft
+  template:
+    metadata:
+      labels:
+        app: minecraft
+    spec:
+      containers:
+        - name: minecraft
+          image: itzg/minecraft-server:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: EULA
+              value: "TRUE"
+            - name: TYPE
+              value: "PAPER"
+            - name: VERSION
+              value: "1.20.2"
+            - name: MEMORY
+              value: "1536M"
+            - name: MOTD
+              value: "SLA-CC Cloud Gaming Benchmark Workload"
+          ports:
+            - containerPort: 25565
+              name: minecraft
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "1536Mi"
+            limits:
+              cpu: "1500m"
+              memory: "2560Mi"
+          volumeMounts:
+            - name: minecraft-data
+              mountPath: /data
+  volumeClaimTemplates:
+    - metadata:
+        name: minecraft-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 10Gi
