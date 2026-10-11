@@ -6,7 +6,9 @@ A conventional Horizontal Pod Autoscaler reacts to a fixed CPU utilization targe
 
 ## Paper-inspired approach
 
-The demonstration starts from a configured CPU threshold. It lowers the threshold by a configurable step when latency crosses warning or critical multiples of the SLO, and raises it slowly when latency remains below 80% of the SLO. A min/max clamp prevents the target leaving the configured safe range. This is a transparent, paper-inspired example, not an exact reproduction of a particular research paper.
+The simulation controller starts from a configured CPU threshold. It lowers the threshold by a configurable step when simulated latency crosses warning or critical multiples of the SLO, and raises it slowly when latency remains below 80% of the SLO. A min/max clamp prevents the target leaving its configured range.
+
+The separate opt-in Kubernetes runtime follows the project plan's explicit rules: P95 >= 300 ms lowers the CPU target by 7.5 points; P95 >= 240 ms and <300 ms lowers it by 5; P95 >=160 ms and <240 ms holds; P95 <160 ms raises it by 1. It has a 60-second cooldown, stale/missing metrics are ignored, and the HPA remains responsible for replica calculation. This is not asserted to reproduce the selected research paper. The provided PDF is a project proposal and does not contain the paper's method details; obtain the cited paper or its pseudocode to make a faithful implementation possible.
 
 ## Evaluation
 

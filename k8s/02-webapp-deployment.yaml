@@ -7,7 +7,9 @@ metadata:
     app: webapp
     tier: microservice
 spec:
-  replicas: 2
+  # Start with one pod on the 2 GiB prototype node. Add an HPA only after
+  # metrics-server and workload behavior have been verified.
+  replicas: 1
   selector:
     matchLabels:
       app: webapp
@@ -22,8 +24,9 @@ spec:
     spec:
       containers:
         - name: webapp
-          image: sla-cc-workload:latest
-          imagePullPolicy: IfNotPresent
+          image: cloudscale-workload:prototype
+          # The image is imported into this K3s node's containerd from a local archive.
+          imagePullPolicy: Never
           ports:
             - containerPort: 8080
               name: http
@@ -38,11 +41,13 @@ spec:
             httpGet:
               path: /health
               port: 8080
-            initialDelaySeconds: 5
             periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
           readinessProbe:
             httpGet:
               path: /health
               port: 8080
-            initialDelaySeconds: 2
             periodSeconds: 5
+            timeoutSeconds: 2
+            failureThreshold: 3

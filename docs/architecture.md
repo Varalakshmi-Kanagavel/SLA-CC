@@ -8,10 +8,10 @@ flowchart TD
     ExperimentEngine --> AdaptiveController[Adaptive Controller]
     ExperimentEngine --> MetricsProvider[Metrics Provider]
     MetricsProvider --> Simulation[Synthetic Simulation]
-    MetricsProvider -. future .-> Prometheus[Prometheus HTTP API]
-    AdaptiveController --> HPA[Simulated scaling decision]
-    HPA -. future .-> Kubernetes[Kubernetes API]
+    MetricsProvider -. optional, unverified .-> Prometheus[Prometheus HTTP API]
+    AdaptiveController --> HPA[Scaling decision]
+    HPA -. optional, unverified .-> Kubernetes[Kubernetes API]
     Kubernetes --> Application[Workload deployment]
 ```
 
-Results are persisted in SQLite. Synthetic mode is the only connected provider in this prototype.
+Simulation results are persisted in SQLite. The optional Prometheus and Kubernetes runtime is packaged separately and remains unverified against the project cluster.

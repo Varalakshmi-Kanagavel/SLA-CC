@@ -1,3 +1,41 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cloudscale-controller
+  namespace: sla-autoscaling
+data:
+  SLO_MS: "200"
+  INITIAL_CPU_TARGET: "70"
+  MIN_CPU_TARGET: "40"
+  MAX_CPU_TARGET: "85"
+  CONTROL_INTERVAL_SECONDS: "10"
+  COOLDOWN_SECONDS: "60"
+  WARNING_MULTIPLIER: "1.2"
+  CRITICAL_MULTIPLIER: "1.5"
+  HEALTHY_MULTIPLIER: "0.8"
+  NORMAL_DECREASE: "5"
+  CRITICAL_DECREASE: "7.5"
+  INCREASE_STEP: "1"
+  MAX_METRIC_AGE_SECONDS: "30"
+  PROMETHEUS_URL: "http://prometheus-server.monitoring.svc.cluster.local"
+  PROMETHEUS_P95_QUERY: "histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[1m])) by (le)) * 1000"
+  PROMETHEUS_TIMEOUT_SECONDS: "3"
+  KUBERNETES_NAMESPACE: "sla-autoscaling"
+  HPA_NAME: "webapp-hpa"
+  LEASE_NAME: "cloudscale-controller-lock"
+  LEASE_DURATION_SECONDS: "30"
+  KUBERNETES_DRY_RUN: "true"
+  LOG_LEVEL: "INFO"
+---
+apiVersion: coordination.k8s.io/v1
+kind: Lease
+metadata:
+  name: cloudscale-controller-lock
+  namespace: sla-autoscaling
+spec:
+  holderIdentity: ""
+  leaseDurationSeconds: 30
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -7,6 +45,8 @@ metadata:
     app: adaptive-controller
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: adaptive-controller
@@ -18,45 +58,29 @@ spec:
       serviceAccountName: adaptive-controller-sa
       containers:
         - name: controller
-          image: sla-cc-controller:latest
+          image: ${CONTROLLER_IMAGE}
           imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: cloudscale-controller
           env:
-            - name: NAMESPACE
-              value: "sla-autoscaling"
-            - name: HPA_NAME
-              value: "webapp-hpa"
-            - name: DEPLOYMENT_NAME
-              value: "webapp-deployment"
-            - name: PROMETHEUS_URL
-              value: "http://prometheus-kube-prometheus-prometheus.monitoring.svc.cluster.local:9090"
-            - name: SLO_MS
-              value: "200"
-            - name: INITIAL_THRESHOLD
-              value: "70"
-            - name: MIN_THRESHOLD
-              value: "40"
-            - name: MAX_THRESHOLD
-              value: "85"
-            - name: DECREASE_STEP
-              value: "5"
-            - name: INCREASE_STEP
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: PYTHONDONTWRITEBYTECODE
               value: "1"
-            - name: WARNING_MULTIPLIER
-              value: "1.2"
-            - name: CRITICAL_MULTIPLIER
-              value: "1.5"
-            - name: COOLDOWN_SECONDS
-              value: "30"
-            - name: POLL_INTERVAL_SECONDS
-              value: "10"
-            - name: DRY_RUN
-              value: "false"
-            - name: IN_CLUSTER
-              value: "true"
           resources:
             requests:
-              cpu: "50m"
-              memory: "64Mi"
+              cpu: 50m
+              memory: 96Mi
             limits:
-              cpu: "200m"
-              memory: "128Mi"
+              cpu: 300m
+              memory: 192Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 10001
+            capabilities:
+              drop: ["ALL"]

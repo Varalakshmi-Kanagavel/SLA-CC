@@ -3,6 +3,8 @@ kind: HorizontalPodAutoscaler
 metadata:
   name: webapp-hpa
   namespace: sla-autoscaling
+  labels:
+    cloudscale-lab/strategy: conventional
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
