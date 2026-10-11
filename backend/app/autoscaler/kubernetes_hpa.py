@@ -66,7 +66,6 @@ class KubernetesHpaAdapter:
             updated = self.api.patch_namespaced_horizontal_pod_autoscaler(
                 self.hpa_name, self.namespace, operations,
                 dry_run="All" if self.dry_run else None,
-                _content_type="application/json-patch+json",
             )
         except Exception:
             logger.exception("HPA update failed namespace=%s hpa=%s old=%s requested=%s",

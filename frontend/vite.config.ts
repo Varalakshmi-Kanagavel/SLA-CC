@@ -7,7 +7,12 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
     server: {
       host: '0.0.0.0',
-      proxy: { '/api': env.VITE_API_PROXY_TARGET || 'http://127.0.0.1:8000' },
+      proxy: {
+        '/api': {
+          target: env.VITE_API_PROXY_TARGET || process.env.BACKEND_URL || 'http://127.0.0.1:8000',
+          changeOrigin: true,
+        },
+      },
     },
   };
 });

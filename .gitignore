@@ -9,3 +9,5 @@ backend/cloudscale.db
 *.tar
 /controller-chunks/
 .env
+*.pem
+*.tsbuildinfo
