@@ -386,13 +386,13 @@ export default function App() {
             <div className="chart-wrapper">
               <ResponsiveContainer width="100%" height={220}>
                 <ComposedChart data={chartData} margin={{ top: 12, right: 12, left: -15, bottom: 0 }}>
-                  <CartesianGrid stroke="#1e293b" strokeDasharray="3 4" vertical={false} />
-                  <XAxis dataKey="t" tick={{ fill: '#64748b', fontSize: 11 }} tickFormatter={(x) => `${x}s`} />
-                  <YAxis tick={{ fill: '#64748b', fontSize: 11 }} />
-                  <Tooltip contentStyle={{ background: '#0b1324', border: '1px solid #1e293b', borderRadius: 8, fontSize: 12 }} />
-                  <ReferenceLine y={sloMs} stroke="#f59e0b" strokeDasharray="5 5" label={{ value: `SLO ${sloMs}ms`, fill: '#fbbf24', fontSize: 11, position: 'insideTopRight' }} />
-                  <Line type="monotone" dataKey="latencyConv" name="Conventional Latency" stroke="#38bdf8" strokeWidth={2.2} dot={false} />
-                  <Line type="monotone" dataKey="latencyAdapt" name="Adaptive Latency" stroke="#a855f7" strokeWidth={2.4} dot={false} />
+                  <CartesianGrid stroke="#39343a" strokeDasharray="3 4" vertical={false} />
+                  <XAxis dataKey="t" tick={{ fill: '#8b838a', fontSize: 11 }} tickFormatter={(x) => `${x}s`} />
+                  <YAxis tick={{ fill: '#8b838a', fontSize: 11 }} />
+                  <Tooltip contentStyle={{ background: '#211e22', border: '1px solid #494149', borderRadius: 6, color: '#eee8eb', fontSize: 12 }} />
+                  <ReferenceLine y={sloMs} stroke="#d3a46c" strokeDasharray="5 5" label={{ value: `SLO ${sloMs}ms`, fill: '#ddb582', fontSize: 11, position: 'insideTopRight' }} />
+                  <Line type="monotone" dataKey="latencyConv" name="Conventional Latency" stroke="#d85c64" strokeWidth={2.2} dot={false} />
+                  <Line type="monotone" dataKey="latencyAdapt" name="Adaptive Latency" stroke="#a66db6" strokeWidth={2.4} dot={false} />
                 </ComposedChart>
               </ResponsiveContainer>
             </div>
@@ -410,12 +410,12 @@ export default function App() {
             <div className="chart-wrapper">
               <ResponsiveContainer width="100%" height={220}>
                 <ComposedChart data={chartData} margin={{ top: 12, right: 12, left: -15, bottom: 0 }}>
-                  <CartesianGrid stroke="#1e293b" strokeDasharray="3 4" vertical={false} />
-                  <XAxis dataKey="t" tick={{ fill: '#64748b', fontSize: 11 }} tickFormatter={(x) => `${x}s`} />
-                  <YAxis domain={[30, 90]} tick={{ fill: '#64748b', fontSize: 11 }} unit="%" />
-                  <Tooltip contentStyle={{ background: '#0b1324', border: '1px solid #1e293b', borderRadius: 8, fontSize: 12 }} />
-                  <Line type="stepAfter" dataKey="thresholdConv" name="Conventional Target" stroke="#38bdf8" strokeWidth={1.8} strokeDasharray="4 4" dot={false} />
-                  <Line type="stepAfter" dataKey="thresholdAdapt" name="Adaptive Target" stroke="#a855f7" strokeWidth={2.4} dot={false} />
+                  <CartesianGrid stroke="#39343a" strokeDasharray="3 4" vertical={false} />
+                  <XAxis dataKey="t" tick={{ fill: '#8b838a', fontSize: 11 }} tickFormatter={(x) => `${x}s`} />
+                  <YAxis domain={[30, 90]} tick={{ fill: '#8b838a', fontSize: 11 }} unit="%" />
+                  <Tooltip contentStyle={{ background: '#211e22', border: '1px solid #494149', borderRadius: 6, color: '#eee8eb', fontSize: 12 }} />
+                  <Line type="stepAfter" dataKey="thresholdConv" name="Conventional Target" stroke="#d85c64" strokeWidth={1.8} strokeDasharray="4 4" dot={false} />
+                  <Line type="stepAfter" dataKey="thresholdAdapt" name="Adaptive Target" stroke="#a66db6" strokeWidth={2.4} dot={false} />
                 </ComposedChart>
               </ResponsiveContainer>
             </div>
@@ -433,12 +433,12 @@ export default function App() {
             <div className="chart-wrapper">
               <ResponsiveContainer width="100%" height={220}>
                 <ComposedChart data={chartData} margin={{ top: 12, right: 12, left: -15, bottom: 0 }}>
-                  <CartesianGrid stroke="#1e293b" strokeDasharray="3 4" vertical={false} />
-                  <XAxis dataKey="t" tick={{ fill: '#64748b', fontSize: 11 }} tickFormatter={(x) => `${x}s`} />
-                  <YAxis allowDecimals={false} tick={{ fill: '#64748b', fontSize: 11 }} />
-                  <Tooltip contentStyle={{ background: '#0b1324', border: '1px solid #1e293b', borderRadius: 8, fontSize: 12 }} />
-                  <Line type="stepAfter" dataKey="replicasConv" name="Conventional Replicas" stroke="#38bdf8" strokeWidth={2.2} dot={false} />
-                  <Line type="stepAfter" dataKey="replicasAdapt" name="Adaptive Replicas" stroke="#a855f7" strokeWidth={2.4} dot={false} />
+                  <CartesianGrid stroke="#39343a" strokeDasharray="3 4" vertical={false} />
+                  <XAxis dataKey="t" tick={{ fill: '#8b838a', fontSize: 11 }} tickFormatter={(x) => `${x}s`} />
+                  <YAxis allowDecimals={false} tick={{ fill: '#8b838a', fontSize: 11 }} />
+                  <Tooltip contentStyle={{ background: '#211e22', border: '1px solid #494149', borderRadius: 6, color: '#eee8eb', fontSize: 12 }} />
+                  <Line type="stepAfter" dataKey="replicasConv" name="Conventional Replicas" stroke="#d85c64" strokeWidth={2.2} dot={false} />
+                  <Line type="stepAfter" dataKey="replicasAdapt" name="Adaptive Replicas" stroke="#a66db6" strokeWidth={2.4} dot={false} />
                 </ComposedChart>
               </ResponsiveContainer>
             </div>
@@ -456,12 +456,12 @@ export default function App() {
             <div className="chart-wrapper">
               <ResponsiveContainer width="100%" height={220}>
                 <ComposedChart data={chartData} margin={{ top: 12, right: 12, left: -15, bottom: 0 }}>
-                  <CartesianGrid stroke="#1e293b" strokeDasharray="3 4" vertical={false} />
-                  <XAxis dataKey="t" tick={{ fill: '#64748b', fontSize: 11 }} tickFormatter={(x) => `${x}s`} />
-                  <YAxis domain={[0, 100]} tick={{ fill: '#64748b', fontSize: 11 }} unit="%" />
-                  <Tooltip contentStyle={{ background: '#0b1324', border: '1px solid #1e293b', borderRadius: 8, fontSize: 12 }} />
-                  <Line type="monotone" dataKey="cpuConv" name="Conventional CPU" stroke="#38bdf8" strokeWidth={2} dot={false} />
-                  <Line type="monotone" dataKey="cpuAdapt" name="Adaptive CPU" stroke="#a855f7" strokeWidth={2} dot={false} />
+                  <CartesianGrid stroke="#39343a" strokeDasharray="3 4" vertical={false} />
+                  <XAxis dataKey="t" tick={{ fill: '#8b838a', fontSize: 11 }} tickFormatter={(x) => `${x}s`} />
+                  <YAxis domain={[0, 100]} tick={{ fill: '#8b838a', fontSize: 11 }} unit="%" />
+                  <Tooltip contentStyle={{ background: '#211e22', border: '1px solid #494149', borderRadius: 6, color: '#eee8eb', fontSize: 12 }} />
+                  <Line type="monotone" dataKey="cpuConv" name="Conventional CPU" stroke="#d85c64" strokeWidth={2} dot={false} />
+                  <Line type="monotone" dataKey="cpuAdapt" name="Adaptive CPU" stroke="#a66db6" strokeWidth={2} dot={false} />
                 </ComposedChart>
               </ResponsiveContainer>
             </div>
